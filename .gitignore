@@ -1,0 +1,11 @@
+monitor
+a.out
+settings.json
+*.o
+build/*
+*.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
