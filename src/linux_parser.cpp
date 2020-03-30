@@ -91,7 +91,7 @@ float LinuxParser::MemoryUtilization() {
       }
     }
   }
-  
+
   return (std::stof(memTotal) - std::stof(memFree)) / std::stof(memTotal);
 }
 
@@ -122,7 +122,22 @@ long LinuxParser::ActiveJiffies() { return 0; }
 long LinuxParser::IdleJiffies() { return 0; }
 
 // TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
+vector<string> LinuxParser::CpuUtilization() {
+  vector<string> cpuUtil{};
+  string line;
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open()) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    std::string token;
+    while (linestream >> token){
+      if (token != "cpu"){
+        cpuUtil.push_back(token);
+      }
+    }
+  }
+  return cpuUtil;
+}
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {

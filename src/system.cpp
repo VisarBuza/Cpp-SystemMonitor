@@ -8,7 +8,6 @@
 #include "processor.h"
 #include "system.h"
 #include "linux_parser.h"
-#include "format.h";
 
 using std::set;
 using std::size_t;
