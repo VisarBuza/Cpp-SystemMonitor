@@ -40,7 +40,7 @@ int Processor::NonIdle(const std::vector<int>& state) {
 }
 
 // Parse the current state from the LinuxParser
-void Processor::ParseCurrentState(){
-  for (std::string token : LinuxParser::CpuUtilization()) 
+void Processor::ParseCurrentState() {
+  for (std::string token : LinuxParser::CpuUtilization())
     currentValues.push_back(std::stoi(token));
 }
