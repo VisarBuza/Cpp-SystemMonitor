@@ -4,35 +4,43 @@
 #include <iostream>
 #include <string>
 
-// TODO: Return the aggregate CPU utilization
+// Return the aggregate CPU utilization
 float Processor::Utilization() {
   if (currentValues.size() == 0) {
-    for (std::string token : LinuxParser::CpuUtilization()) {
-      currentValues.push_back(std::stoi(token));
-    }
+    ParseCurrentState();
     return 0.0;
   }
 
   previousValues = currentValues;
   currentValues.clear();
+  ParseCurrentState();
 
-  for (std::string token : LinuxParser::CpuUtilization()) {
-    currentValues.push_back(std::stoi(token));
-  }
-
-  float prevIdle = previousValues[3] + previousValues[4];
-  float prevNonIdle = previousValues[0] + previousValues[1] +
-                      previousValues[2] + previousValues[5] +
-                      previousValues[6] + previousValues[7];
-  float prevTotal = prevIdle + prevNonIdle;
-
-  float idle = currentValues[3] + currentValues[4];
-  float nonIdle = currentValues[0] + currentValues[1] + currentValues[2] +
-                  currentValues[5] + currentValues[6] + currentValues[7];
-  float total = idle + nonIdle;
+  float prevTotal = Idle(previousValues) + NonIdle(previousValues);
+  float total = Idle(currentValues) + NonIdle(currentValues);
 
   float totalDifference = total - prevTotal;
-  float idleDifference = idle - prevIdle;
-  
+  float idleDifference = Idle(currentValues) - Idle(previousValues);
+
   return (totalDifference - idleDifference) / totalDifference;
+}
+
+// Calculate the amount of time spent on idle
+int Processor::Idle(const std::vector<int>& state) {
+  return state[3] + state[4];
+}
+
+// Calculate the amount of time spent utilized
+int Processor::NonIdle(const std::vector<int>& state) {
+  int sum = 0;
+  for (int mode : state) {
+    sum += mode;
+  }
+  sum -= (state[3] + state[4]);
+  return sum;
+}
+
+// Parse the current state from the LinuxParser
+void Processor::ParseCurrentState(){
+  for (std::string token : LinuxParser::CpuUtilization()) 
+    currentValues.push_back(std::stoi(token));
 }
