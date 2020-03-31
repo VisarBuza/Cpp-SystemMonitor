@@ -5,6 +5,8 @@
 
 namespace Format {
 std::string ElapsedTime(long times);  // TODO: See src/format.cpp
+std::string ConvertToMb(std::string ram);
 };                                    // namespace Format
+
 
 #endif

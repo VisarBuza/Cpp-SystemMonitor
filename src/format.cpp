@@ -15,3 +15,9 @@ string Format::ElapsedTime(long seconds) {
     remainingSeconds = remainingSeconds % 60;
     return std::to_string(hours) + ":" + std::to_string(minutes) + ":" + std::to_string(remainingSeconds);  
 }
+
+string Format::ConvertToMb(string ram) {
+    long kb = std::stol(ram);
+    long mb = kb / 1000;
+    return std::to_string(mb);
+}
